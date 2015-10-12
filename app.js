@@ -10,9 +10,9 @@ angular.module('flapperNews', ['ui.router'])
           controller: 'MainCtrl'
         })
         .state ('posts', {
-          url: 'posts/{id}',
+          url: '/posts/{id}',
           templateUrl: '/posts.html',
-          controller: 'PostCtrl'
+          controller: 'PostsCtrl'
         });
 
       $urlRouterProvider.otherwise('home');
@@ -50,10 +50,22 @@ angular.module('flapperNews', ['ui.router'])
         post.upvotes += 1;
       }
     }])
-  .controller( 'PostCtrl', [
+  .controller( 'PostsCtrl', [
     '$scope',
-    '$stateParam',
+    '$stateParams',
     'posts',
-    function($scope, $stateParam, posts) {
-      $scope.post = posts.posts[$stateParam.id];
+    function($scope, $stateParams, posts) {
+      $scope.post = posts.posts[$stateParams.id];
+
+      $scope.addComment = function(){
+        if($scope.body === '') { return; }
+        $scope.post.comments.push({
+          body: $scope.body,
+          author: 'user',
+          upvotes: 0
+        });
+        $scope.body = "";
+      };
+
+
     }])
